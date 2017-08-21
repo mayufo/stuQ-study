@@ -1,13 +1,13 @@
 # 答疑课
 
-## express egg koa 新手应该学那个？
+* express egg koa 新手应该学那个？
 
 1 connect:  es5语法  没有用generator和async function 
 2 koa: node 8.0开始有async function，Node 6.0 有generator，koa是connect的进化版
 3 正式项目中用egg，对应的配套功能较多。例如deBugger能力
 4 express 新项目不推荐使用，旧项目使用较多
 
-## void apply(plugins: Plugin...)
+* void apply(plugins: Plugin...) ?
 
 声明在前面说明返回值，例如[TypeScript](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)，是javascript有类型
 
@@ -23,7 +23,7 @@ a,b对应number,返回number
 `apply` 函数的名字
 `plugins`: 参数 后面的省略号表示能传多个参数例如apply(a, b, c, d)
 
-## callback: (err?: Error) -> void的意思
+* callback: (err?: Error) -> void的意思 ?
 
  callback 对应的声明如下
 ```
@@ -32,7 +32,7 @@ function (err?: Error) {  // 函数有可能接收到error, ?:表示有或者没
 }
 ```
 
-## `(this.events[event] = this.events[event] || []).push(fn)`的意思
+*  `(this.events[event] = this.events[event] || []).push(fn)`的意思 ?
 
 可以分解为如下
 
@@ -42,7 +42,7 @@ this.events[event].push(fn)
 ```
 
 
-## 如何看各式各样的库源码，经验分享
+* 如何看各式各样的库源码，经验分享 ？
 
 1. 先看官网文档api，了解一些方法
 2. 再看测试用例
@@ -51,7 +51,7 @@ this.events[event].push(fn)
 5. 写一篇文章做源代码分析总结 
 6. 再对比别人的源分析
 
-## 老师用什么软件
+* 老师用什么软件 ？
 
  vscode(老师自用)
  
@@ -69,18 +69,18 @@ this.events[event].push(fn)
  
  GIT or Svn (版本控制)
  
-## TypeScript适合新手学习吗？ 
+* TypeScript适合新手学习吗 ？ 
 
 不适合，适合有类型语言的同学学习（java、c++、c#）
 大型项目中
 可以使用[jsdoc](http://www.css88.com/doc/jsdoc/),对函数的类型进行注释，
 也可以使用TypeScript在语言层面解决类型问题
 
-## 还有err?: Error是ES6的写法吗？ 
+* 还有err?: Error是ES6的写法吗？ 
 
 有类型的es4（已废弃），改变巨大不兼容以前的写法
 
-## `？：`是什么
+* `？：`是什么
 
 表示有或者没有
 Swift的基础语法，有机会可以了解
@@ -427,6 +427,112 @@ app()
 [Async Function](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/async_function) 
 
 在前端中使用管道模型 [RxJS](https://buctwbzs.gitbooks.io/rxjs/content/) 比较前言和冷门，可以了解一点
+
+
+通常注册事件监听
+
+```
+var button = document.querySelector('button')
+button.addEventListener('click', () => console.log('Clicked!'))
+```
+Rxjx创建一个观察对象
+
+```
+var button = document.querySelector('button')
+Rx.Observable.fromEvent(button, 'click').subscribe(() => console.log('Clicked'))
+```
+[RxJS可视化的例子]（https://rxviz.com/examples/basic-interval）
+
+Basic interval 每隔1秒会take一下从take1到take4
+```
+Rx.Observable
+  .interval(1000)
+  .take(4)
+```
+
+Mouse move
+
+当鼠标移动的时候，每300毫秒抓取一次鼠标X轴坐标
+```
+Rx.Observable
+  .fromEvent(document, 'mousemove')
+  .map(event => event.clientX) 
+  .throttleTime(300)  // 300毫秒的限流
+```
+
+Input element
+过滤出输入的值不为空的
+```
+const input = document.createElement('input');
+
+input.setAttribute('placeholder', 'Type something');
+
+/*
+  `output` represents the right hand pane.
+  You can prepend/append elements to it.
+ */
+output.prepend(input);
+
+input.focus();
+
+Rx.Observable
+  .fromEvent(input, 'keydown')
+  .map(e => e.key)
+  .filter(key => key !== ' ');
+
+```
+
+点操作像`stream`本身就能屏蔽掉异步和非异步的操作，能够用同样的方式去写代码
+
+* 如何理解点操作屏蔽掉异步和非异步的操作 ？
+```
+async1() // run task 1
+ .then(async2) // run task 2
+ .then(async3)  // run task 3
+```
+类型上面的代码，你可能无法看出是同步操作还是异步操作，像同步操作但是可以完成异步的操作，可以用同样的方式去写，因此屏蔽掉了同步和异步
+
+* node的方法返回都不是promise,在于async结合使用的时候，都把这些方法封装一下吗 ？
+
+  可以用`blueBird`对node方法的返回进行Promise的封装，再和async结合用
+
+* Promise如何实现 ？
+[promise](https://github.com/then/promise)
+[asThread](https://github.com/miniflycn/asThread)
+[一种模仿线程的Javascript异步模型设计&实现](http://www.cnblogs.com/justany/archive/2013/01/25/2874602.html)
+顺序实现的方法
+一个打包函数Fn队列(所谓打包函数就是将回调函数打包后产生的新的函数)
+
+这样产生一个队列，而每产生一个打包函数就push到队列中
+
+在执行的时候setTimout等待后，提供一个fire方法来触发线程取出一个打包函数然后执行，打包函数执行以后回调Thread的fire方法
+```
+function package(callback){
+    return function(){
+        callback();
+        // 干其他事情
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
