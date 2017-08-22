@@ -482,7 +482,7 @@ Rx.Observable
 
 ```
 
-点操作像`stream`本身就能屏蔽掉异步和非异步的操作，能够用同样的方式去写代码
+线操作像`stream`本身就能屏蔽掉异步和非异步的操作，能够用同样的方式去写代码
 
 * 如何理解点操作屏蔽掉异步和非异步的操作 ？
 ```
@@ -515,20 +515,256 @@ function package(callback){
 }
 ```
 
+# 模块化
+
+## global-module
+
+最早没有模板化，当时主要期望通过闭包，来解决全局变量污染的问题
+通过自执行函数，将global传进去，然后将方法挂载在global
+但库依然占用全局变量
+
+```js
+!function (root) {
+  function $() {
+    // TODO
+  }
+  root.$ = $
+}(global || window)
+```
+## global-confict
+
+```js
+// 第一个
+!function (root) {
+  function $() {
+    console.log('i am no.1')
+  }
+
+  root.$ = $
+}(global)
+
+
+// 第二个
+!function (root) {
+  function $() {
+    
+    console.log('i am no.2')
+  }
+
+  root.$ = $
+}(global)
+
+function a() {
+  $()
+}
+
+a() // i am no.2 第一个方法假如是jquery，和第二方法重名，被重复定义，jquery被覆盖
+```
+
+如果不想第一个函数被覆盖
+
+```js
+// 第一个
+!function (root) {
+  function $() {
+    console.log('i am no.1')
+  }
+
+  /**
+   * 非冲突
+   */
+  $.noConflict = function () {
+    root.$ = null  // 将$设置为空并return 实例
+    return $
+  }
+
+  root.$ = $
+}(global)
+
+/**
+ * 处理冲突
+ */
+const jQuery = $.noConflict()
+
+function a() {
+  jQuery()
+}
+
+
+// 第二个
+!function (root) {
+  function $() {
+    console.log('i am no.2')
+  }
+
+  root.$ = $
+}(global)
+
+
+a() // i am no.1
+```
+
+## common
+
+当所有的库，都想方设法的在window上挂东西，有可能产生各种冲突
+这时候人们尝试用node的common.js规范
+
+```js
+// export-fail
+exports.word = 'hello'
+module.exports = function () {
+  console.log(exports.word)
+}
+```
+
+
+```js
+const fail = require('./module/export-fail')
+
+fail() // hello world
+console.log(fail.word)  // undefined
+```
+
+> 为什么这里是undefined ?
+
+exports 是一个对象，后面的方法赋值把对象的指向改变了
+
+## common-mean
+
+```js
+const fs = require('fs')
+const path = require('path')
+
+function runner(file) {
+  const code = fs.readFileSync(path.join(__dirname, file), 'utf-8') // 以utf-8的形式打开文件
+  const module = { exports: {} }
+  const fn = new Function('module', 'exports', code)
+  fn(module, module.exports)
+  return module.exports
+}
 
 
 
+// 等同于 const fail = require('./module/export-fail')
+const fail = runner('./module/export-fail.js')
+
+fail() // hello
+console.log(fail.word) // undefined
+
+/**
+ * fn 到底生成了怎样的函数？
+ * 这时候看出来为什么了吗？
+ */
+function _fn(module, exports) {
+  exports.word = 'hello' // 这里依然等于上面设置的空对象
+  module.exports = function () { // 这里的module.export被覆盖，不是原来的空对象
+    console.log(exports.word) // hello 这里依然可以打印出hello,但是module.exports.word就打印不出来了
+  }
+}
+
+```
+
+## require-have-name 
+
+`AMD`定义模块的规则
+
+```js
+define('./cases/5.require-have-name.js', 'hello world')
+```
+
+```js
+require._ = {}
+
+// 我们怎么加载一个js？
+function require(path, cb) {
+    const script = document.createElement('script') 
+    script.src = path
+    script.onload = function () {
+        cb(require._[path])
+    }
+    document.body.appendChild(script)
+}
+
+// 实现一个对应的define
+function define(path, factory) {
+    let module
+    if (typeof factory === 'function') {
+        module = factory()
+    } else {
+        module = factory        
+    }
+    require._[path] = module
+}
+```
+有名的define可以将名字和module对应的存起来
+在require回调的时候对应的取出来
+
+## require-no-name
+
+```js
+function require(path, cb) {
+    const script = document.createElement('script')
+    script.src = path
+    script.onload = function () {
+        const factory = require.stack.shift()
+        let module
+        if (typeof factory === 'function') {
+            module = factory()
+        } else {
+            module = factory
+        }
+        require._[path] = module
+        cb(module)
+    }
+    document.body.appendChild(script)
+}
+require._ = {}
+require.stack = []
+
+// 实现一个对应的define
+function define(factory) {
+    require.stack.push(factory) // 将方法推导堆栈里面
+}
+```
+无名就情况下define只能将module push进一个堆栈里面，
+在require中取出module，对应处理
+
+# 下次作业
+
+[webkit-dwarf](https://github.com/dwarfJS/webkit-dwarf)
+
+做一些东西的时候要说出背景
+
+Cache 方法来记录每个module所对应的加载器
+
+Def 存储stack
+
+Loader 用来取值，将事件分发到其他地，加载模块
+
+makeRequire 生成require的函数
+
+define 生成define
+
+define里面有可能通过有名的方式生成多个模块，再根据有名生成一个无名模块
 
 
+```
+define('xxx', 'sdafsafa')
+define('yyy', 'sdgfsga')
+define(['xxx', 'yyy'], function (xxx, yyy) {
+  return xxx + yyy 
+})
+```
 
+因此在Def中push了很多的
 
-
-
-
-
-
-
-
+```
+Def.push({
+    m: module,
+    d: deps,
+    f: factory
+})
+```
 
 
 

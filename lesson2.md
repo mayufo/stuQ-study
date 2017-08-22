@@ -5,8 +5,7 @@ tags: [notebook,study]
 toc: true
 ---
 
-
-lesson2 
+lesson2
 
 <!-- more -->
 
