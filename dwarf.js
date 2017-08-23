@@ -108,7 +108,7 @@
                         factory = o.f,
                         base = ~module.indexOf('/') ?
                             module.replace(/[^\/]+$/, '') :
-                            _path[module].replace(/[^\/]+$/, ''); // 算出url
+                            _path[module].replace(/[^\/]+$/, ''); // 算出url  ~module.indexOf('/') 可以快速判断出module是否包含/ 包含就是true
                     return makeRequire({ base: base })(deps, function () {
                         var loader = Cache.get(module);
                         return !loader.loaded && loader.set(factory);

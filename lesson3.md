@@ -739,13 +739,13 @@ Cache 方法来记录每个module所对应的加载器
 
 Def 存储stack
 
-Loader 用来取值，将事件分发到其他地，加载模块
+Loader 用来取值，将事件分发到其他地方，加载模块，加载js
 
-makeRequire 生成require的函数
+makeRequire 生成require的函数,处理不同的baseURL
 
 define 生成define
 
-define里面有可能通过有名的方式生成多个模块，再根据有名生成一个无名模块
+_resolvePath用来处理路径
 
 
 ```
@@ -766,15 +766,72 @@ Def.push({
 })
 ```
 
+Loader.done 处理成功module
+Loader.down 处理失败module
+
+homework4 写一个amd加载器
+
+> 循环引用 ？为什么会写出这种代码？
+
+a引用b,b引用c,c又引用a
+这意味着b应该在a前，c应该在b前，a应该在c前，这就出现了矛盾
+本质来说是其中某个模块没有仔细划分，循环依赖本身不该出现
+
+> 如果判断加载器是AMD规范还是CMD规范
+
+1. 写法差别
+
+CMD -> seajs的规范
+AMD -> RequireJS的规范(Commonjs出现后，js社区做的)
+
+```
+// CMD
+defind(['a'], function (require, module, exports) {
+  require('a')
+})
+
+// AMD
+
+define(['a', 'requrie'], function (a, require) {
+
+})
+```
+
+2.执行顺序
+
+CMD第一次做require操作执行factory
+
+```js
+define(['X'], function (require) {
+  // 执行这段的时候 factory才被执行
+  const x = require('x')
+})
+```
+
+factory在AMD是提早执行
+
+```js
+define(['X'], function () {
+  //  这段之前x已经有值，factory提早执行
+  console.log(X)
+})
+
+```
+
+不推荐CMD
+
+> 按位非的问题 `~module.indexOf('/')`
+
+~ 返回数值的反码,相当于负数减1
+因为`~`是按位非 `'asdf'.indexOf('c')`结果是-1，-1按位取非为0, 而如果能找到就是大于0，大于0的值取反都是负数
+~module.indexOf('/') 可以快速判断出module是否包含/ 包含就是true
+
+最好的写法前面加上两个感叹号，
+
+！！~module.indexOf('/') 
 
 
 
 
 
-
-
-如何快速了解前端一些大事，比如上节课提到的minggejs这个梗又或者了解知道某某是前端大牛，如何开拓自己的前端圈子
-
-上次作业中提到，homework2说ajax、jsonp、跨域可以通过这个机制做分发，什么叫做分发？
-
-那我可以根据options，在不同的options返回不同的endpoint
+如何快速了解前端一些大事，比如上节课提到的minggejs这个梗又或者了解知道某某是前端大牛，如何开拓自己的前端圈子，了解最新的前端咨询或者新框架新技术？
