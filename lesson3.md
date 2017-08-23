@@ -2,14 +2,14 @@
 
 * express egg koa 新手应该学那个？
 
-1 connect:  es5语法  没有用generator和async function 
-2 koa: node 8.0开始有async function，Node 6.0 有generator，koa是connect的进化版
-3 正式项目中用egg，对应的配套功能较多。例如deBugger能力
-4 express 新项目不推荐使用，旧项目使用较多
+1. connect:  es5语法  没有用generator和async function
+2. koa: node 8.0开始有async function，Node 6.0 有generator，koa是connect的进化版
+3. 正式项目中用egg，对应的配套功能较多。例如deBugger能力
+4. express 新项目不推荐使用，旧项目使用较多
 
 * void apply(plugins: Plugin...) ?
 
-声明在前面说明返回值，例如[TypeScript](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)，是javascript有类型
+例如[TypeScript](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)，是javascript有类型
 
 ```
 function mul(a: number, b: number) {  
@@ -19,16 +19,17 @@ function mul(a: number, b: number) {
 a,b对应number,返回number
 
 回到我们的例子
-`void`： 无返回值
-`apply` 函数的名字
-`plugins`: 参数 后面的省略号表示能传多个参数例如apply(a, b, c, d)
+
+  * `void`： 无返回值
+  * `apply` 函数的名字
+  * `plugins`: 参数 后面的省略号表示能传多个参数例如apply(a, b, c, d)
 
 * callback: (err?: Error) -> void的意思 ?
 
  callback 对应的声明如下
 ```
 function (err?: Error) {  // 函数有可能接收到error, ?:表示有或者没有，err表示 new Error的实例
-  return void  // 返回为空，只是用来处理error
+  return void  // 返回为空，函数只是用来处理error
 }
 ```
 
@@ -53,21 +54,21 @@ this.events[event].push(fn)
 
 * 老师用什么软件 ？
 
- vscode(老师自用)
+  * vscode(老师自用)
+  
+  * 推荐其他IDE
+  
+  * fiddler(window)
+  
+  * charles(Mac)
+  
+  * iTerm(Mac)终端
+  
+  * MWeb(做笔记的软件)
+  
+  * Phototshop、Sketch(作图)
  
- 推荐其他IDE
- 
- fiddler(window)
- 
- charles(Mac)
- 
- iTerm(Mac)终端
- 
- MWeb(做笔记的软件)
- 
- Phototshop、Sketch(作图)
- 
- GIT or Svn (版本控制)
+  * GIT or Svn (版本控制)
  
 * TypeScript适合新手学习吗 ？ 
 
@@ -78,7 +79,7 @@ this.events[event].push(fn)
 
 * 还有err?: Error是ES6的写法吗？ 
 
-有类型的es4（已废弃），改变巨大不兼容以前的写法
+这个不是es6，有类型的es4（已废弃），之所以废弃es4是因为改变巨大不兼容以前的写法
 
 * `？：`是什么
 
@@ -104,18 +105,18 @@ ajax、jsonp、跨域请求可以通过不同的库处理，然后通过这个�
 
 # stream
 
-假设数据量很大，只能一块一块读取
+使用场景： 假设数据量很大，只能一块一块读取
 
 一个数据需要10s读取，而`Nodejs`是单进程,`Promise`只会返回一次，不符合大数据的需求，这时候需要使用`stream`
 
-- Readable Stream 可读的流
-- Writable Stream 可写的流
-- Duplex Stream 可读可写的流
-- Transform Stream 操作被写入数据然后读出结果的流
+ * Readable Stream 可读的流
+ * Writable Stream 可写的流
+ * Duplex Stream 可读可写的流
+ * Transform Stream 操作被写入数据然后读出结果的流
 
 ## Readable Steam
 
-每100毫秒读取一个字母，并且把这段流传递给`process.stdout`， `process.stdout`也是流接收到后就打印出来
+每100毫秒读取一个字母，并且把这段流传递给`process.stdout`， `process.stdout`也是流，接收到后就打印出来
 
 ```js
 /**
@@ -195,7 +196,6 @@ setTimeout(() => {
 ## 实际使用
 
 
-
 ### http
 
 post一个数据来判断数据的类型
@@ -248,9 +248,9 @@ server.listen(8080, () => {
 
 通过实例了解到
 
-每拿到一点东西就会做处理而不是等到整个拿到再做处理
-情景可以想象图片的懒加载，开始图片模糊，然后逐渐清晰
-一段一段处理，因为网络本身就是一段一段，而不是后台给的一段一段
+* 每拿到一点东西就会做处理而不是等到整个拿到再做处理
+* 情景可以想象图片的懒加载，开始图片模糊，然后逐渐清晰
+* 一段一段处理，因为网络本身就是一段一段，而不是后台给的一段一段
 
 ### read-n-write
 
@@ -296,10 +296,10 @@ inp.pipe(gzip).pipe(out)
 `stream`可以想象成管子，管子一个个接起来，里面流动的东西可以根据每个`stream`定义的方式来处理，一个个处理
 
 `Stream` 对象都是 `EventEmitter`的实例。常用的事件有
-`data`表示当有数据可读时触发
-`end`没有更多的数据可读时触发
-`error`在接收和写入过程中发生错误时触发
-`finish`所有数据已被写入到底层系统时触发
+* `data`表示当有数据可读时触发
+* `end`没有更多的数据可读时触发
+* `error`在接收和写入过程中发生错误时触发
+* `finish`所有数据已被写入到底层系统时触发
 
 这个数据流开始有`on`事件，结束有`end`事件
 
@@ -420,7 +420,7 @@ app()
 常用的是`http.createServer()`发起请求和`http.createServer()`创建一个服务器
 `zlib`通常做一些gzip压处理
 
-以前再做文件构建的时候需要gulp,运用到流的东西需要了解stream,而Steam 是 NodeJS 的核心编程模型
+以前再做文件构建的时候需要`gulp`,运用到流的东西需要了解`Stream`,而`Steam`是`NodeJS`的核心编程模型
 
 [Generator 函数的含义与用法](http://www.ruanyifeng.com/blog/2015/04/generator.html)
 
@@ -467,10 +467,6 @@ const input = document.createElement('input');
 
 input.setAttribute('placeholder', 'Type something');
 
-/*
-  `output` represents the right hand pane.
-  You can prepend/append elements to it.
- */
 output.prepend(input);
 
 input.focus();
@@ -497,16 +493,19 @@ async1() // run task 1
   可以用`blueBird`对node方法的返回进行Promise的封装，再和async结合用
 
 * Promise如何实现 ？
-[promise](https://github.com/then/promise)
-[asThread](https://github.com/miniflycn/asThread)
-[一种模仿线程的Javascript异步模型设计&实现](http://www.cnblogs.com/justany/archive/2013/01/25/2874602.html)
-顺序实现的方法
+
+  * [promise](https://github.com/then/promise)
+  * [asThread](https://github.com/miniflycn/asThread)
+  * [一种模仿线程的Javascript异步模型设计&实现](http://www.cnblogs.com/justany/archive/2013/01/25/2874602.html)
+asThread顺序实现的方法
 一个打包函数Fn队列(所谓打包函数就是将回调函数打包后产生的新的函数)
 
 这样产生一个队列，而每产生一个打包函数就push到队列中
 
 在执行的时候setTimout等待后，提供一个fire方法来触发线程取出一个打包函数然后执行，打包函数执行以后回调Thread的fire方法
+
 ```
+// 打包函数
 function package(callback){
     return function(){
         callback();
@@ -520,7 +519,7 @@ function package(callback){
 ## global-module
 
 最早没有模板化，当时主要期望通过闭包，来解决全局变量污染的问题
-通过自执行函数，将global传进去，然后将方法挂载在global
+通过自执行函数，将`global`传进去，然后将方法挂载在`global`
 但库依然占用全局变量
 
 ```js
@@ -531,7 +530,7 @@ function package(callback){
   root.$ = $
 }(global || window)
 ```
-## global-confict
+## global-conflct
 
 ```js
 // 第一个
@@ -577,7 +576,6 @@ a() // i am no.2 第一个方法假如是jquery，和第二方法重名，被重
     root.$ = null  // 将$设置为空并return 实例
     return $
   }
-
   root.$ = $
 }(global)
 
@@ -627,7 +625,7 @@ console.log(fail.word)  // undefined
 
 > 为什么这里是undefined ?
 
-exports 是一个对象，后面的方法赋值把对象的指向改变了
+`exports`是一个对象，后面的方法赋值把对象的指向改变了
 
 ## common-mean
 
@@ -642,8 +640,6 @@ function runner(file) {
   fn(module, module.exports)
   return module.exports
 }
-
-
 
 // 等同于 const fail = require('./module/export-fail')
 const fail = runner('./module/export-fail.js')
@@ -696,8 +692,8 @@ function define(path, factory) {
     require._[path] = module
 }
 ```
-有名的define可以将名字和module对应的存起来
-在require回调的时候对应的取出来
+有名的`define`可以将名字和`module`对应的存起来
+在`require`回调的时候对应的取出来
 
 ## require-no-name
 
@@ -726,8 +722,8 @@ function define(factory) {
     require.stack.push(factory) // 将方法推导堆栈里面
 }
 ```
-无名就情况下define只能将module push进一个堆栈里面，
-在require中取出module，对应处理
+无名就情况下`define`只能将module push进一个堆栈里面，
+在`require`中取出`module`，对应处理
 
 # 下次作业
 
@@ -735,17 +731,17 @@ function define(factory) {
 
 做一些东西的时候要说出背景
 
-Cache 方法来记录每个module所对应的加载器
+* `Cache` 方法来记录每个`module`所对应的加载器
 
-Def 存储stack
+* `Def` 存储stack
 
-Loader 用来取值，将事件分发到其他地方，加载模块，加载js
+* `Loader` 用来取值，将事件分发到其他地方，加载模块，加载js
 
-makeRequire 生成require的函数,处理不同的baseURL
+* `makeRequire` 生成require的函数,处理不同的baseURL
 
-define 生成define
+* `define` 生成define
 
-_resolvePath用来处理路径
+* `_resolvePath` 用来处理路径
 
 
 ```
@@ -771,13 +767,13 @@ Loader.down 处理失败module
 
 homework4 写一个amd加载器
 
-> 循环引用 ？为什么会写出这种代码？
+* 循环引用 ？为什么会写出这种代码？
 
 a引用b,b引用c,c又引用a
 这意味着b应该在a前，c应该在b前，a应该在c前，这就出现了矛盾
 本质来说是其中某个模块没有仔细划分，循环依赖本身不该出现
 
-> 如果判断加载器是AMD规范还是CMD规范
+* 如果判断加载器是AMD规范还是CMD规范
 
 1. 写法差别
 
@@ -797,7 +793,7 @@ define(['a', 'requrie'], function (a, require) {
 })
 ```
 
-2.执行顺序
+2. 执行顺序
 
 CMD第一次做require操作执行factory
 
@@ -820,7 +816,7 @@ define(['X'], function () {
 
 不推荐CMD
 
-> 按位非的问题 `~module.indexOf('/')`
+* 按位非的问题 `~module.indexOf('/')`
 
 ~ 返回数值的反码,相当于负数减1
 因为`~`是按位非 `'asdf'.indexOf('c')`结果是-1，-1按位取非为0, 而如果能找到就是大于0，大于0的值取反都是负数
@@ -834,4 +830,4 @@ define(['X'], function () {
 
 
 
-如何快速了解前端一些大事，比如上节课提到的minggejs这个梗又或者了解知道某某是前端大牛，如何开拓自己的前端圈子，了解最新的前端咨询或者新框架新技术？
+
