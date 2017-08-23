@@ -11,9 +11,9 @@ lesson2
 
 # 上一次作业
 
-- 每次作业需要做边界检测，对象和数值有没有超出范围
-- 链表的操作
-- coverage
+ * 每次作业需要做边界检测，对象和数值有没有超出范围
+ * 链表的操作
+ * coverage
 
 
 使用`karma-coverage`
@@ -43,6 +43,8 @@ karma.config.js
 
 
 # exercise4
+
+[exercise4](https://github.com/FE-star/exercise4)
 
 ## test1
 
@@ -153,7 +155,11 @@ expect(add(1, 1)).to.be.equal(2);
 `egg`阿里的做的类似上面 （洋葱圈模型）
 
 
-# xhr
+# 跨域请求问题
+
+[showcase1](https://github.com/FE-star/showcase1)
+
+## xhr
 
 ```js
 const xhr = new XMLHttpRequest()
@@ -191,14 +197,14 @@ xhr.open('GET', 'http://y.stuq.com:7001/json', true)
 xhr.send(null)
 ```
 
-# 跨域问题
+## 跨域问题
 
 
 post 会send一些值
 get 会带参数  `http://y.stuq.com:7001/json?name=mayufo`
 xhr.open('请求方法'， '请求url', 'true表示异步')
 
-##  jsonp
+###  jsonp
 
 
 `http://y.stuq.com:7001/json?callback=ss`
@@ -233,7 +239,7 @@ document.body.appendChild(script)
 - AJAX请求不能发送 (公司内网和外网隔离，外网无法内网数据，如果可以请求AJAX请求，内网有个机密的pdf，黑客在外网加一个服务器，内网用户访问这个服务器，通过ajax把pdf下载下来,再上传到他外网的服务器，因为浏览器可以跨域访问)
 
 
-## CORS
+### CORS
 
 XML2.0 以后出现的新方法
 
@@ -271,7 +277,7 @@ module.exports = app => {
   return CrosController
 }
 ```
-## iframe
+### iframe
 
 `onhashchange`当hash变化
 
@@ -315,7 +321,7 @@ function getParmFromHash(url, parm) {
     return(match ? match[1] : "");
 }
 ```
-## window.name
+### window.name
 
 被iframe嵌套的
 
@@ -349,7 +355,7 @@ iframe.onload = function () {
 
 ```
 
-## postMessage
+### postMessage
 
 通过postMessage传递,数据可以相互传递
 被`iframe`嵌套的
@@ -377,7 +383,7 @@ window.addEventListener('message', function(e) {
 }, false);
 ```
 
-## require
+### require
 
 callback换成define,是和AMD一样的东西
 
@@ -401,6 +407,8 @@ callback换成define,是和AMD一样的东西
 `Referer` 就是发起请求，谁来引用的， 后台可以根据这个地址来变成对应的域
 
 # 继承
+
+[execrise5](https://github.com/FE-star/execrise5)
 
 ## es5
 

@@ -1,11 +1,18 @@
+---
+title: 学习笔记lesson3
+date: 2017-08-24 00:12:37
+tags: [notebook,study]
+toc: true
+---
+
 # 答疑课
 
 * express egg koa 新手应该学那个？
 
-1. connect:  es5语法  没有用generator和async function
-2. koa: node 8.0开始有async function，Node 6.0 有generator，koa是connect的进化版
-3. 正式项目中用egg，对应的配套功能较多。例如deBugger能力
-4. express 新项目不推荐使用，旧项目使用较多
+  1. connect:  es5语法  没有用generator和async function
+  2. koa: node 8.0开始有async function，Node 6.0 有generator，koa是connect的进化版
+  3. 正式项目中用egg，对应的配套功能较多。例如deBugger能力
+  4. express 新项目不推荐使用，旧项目使用较多
 
 * void apply(plugins: Plugin...) ?
 
@@ -26,7 +33,8 @@ a,b对应number,返回number
 
 * callback: (err?: Error) -> void的意思 ?
 
- callback 对应的声明如下
+callback 对应的声明如下
+
 ```
 function (err?: Error) {  // 函数有可能接收到error, ?:表示有或者没有，err表示 new Error的实例
   return void  // 返回为空，函数只是用来处理error
@@ -45,12 +53,12 @@ this.events[event].push(fn)
 
 * 如何看各式各样的库源码，经验分享 ？
 
-1. 先看官网文档api，了解一些方法
-2. 再看测试用例
-3. 从入口文件看看源代码,按照依赖项从头开始看 
-4. 从而了解每个方法做什么事情  
-5. 写一篇文章做源代码分析总结 
-6. 再对比别人的源分析
+  1. 先看官网文档api，了解一些方法
+  2. 再看测试用例
+  3. 从入口文件看看源代码,按照依赖项从头开始看 
+  4. 从而了解每个方法做什么事情  
+  5. 写一篇文章做源代码分析总结 
+  6. 再对比别人的源分析
 
 * 老师用什么软件 ？
 
@@ -84,7 +92,7 @@ this.events[event].push(fn)
 * `？：`是什么
 
 表示有或者没有
-Swift的基础语法，有机会可以了解
+`Swift`的基础语法，有机会可以了解
 
 # 上次作业
 
@@ -104,6 +112,8 @@ ajax、jsonp、跨域请求可以通过不同的库处理，然后通过这个�
 而`Object.assign({}, this.options, options)`的好处可以不污染以前的`options`，防止一些奇怪的事情发生
 
 # stream
+
+[showcase2](https://github.com/mayufo/showcase2)
 
 使用场景： 假设数据量很大，只能一块一块读取
 
@@ -516,6 +526,9 @@ function package(callback){
 
 # 模块化
 
+[showcase3](https://github.com/mayufo/showcase3)
+
+
 ## global-module
 
 最早没有模板化，当时主要期望通过闭包，来解决全局变量污染的问题
@@ -530,7 +543,7 @@ function package(callback){
   root.$ = $
 }(global || window)
 ```
-## global-conflct
+## global-conflict
 
 ```js
 // 第一个
