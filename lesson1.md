@@ -301,4 +301,126 @@ try{
     assert.equal(e.message, 'xxx is not defined')
 }
 ```
+在开源项目中发现一个`bug`,不仅要解决bug,而且需要测试用例来描述
+
 ## [exercise2](https://github.com/FE-star/exercise2)
+
+大数相加思路
+
+- 将需要相加的数用`split`拆为数组
+- 由于位数不一定相等可以使用`reverse`对数组进行倒序
+- 判断出那个位数比较多的作为循环的结束，通过循环，按位相加,并加进位符flag
+- 如果某位大于9，则次位需要减10，并设置进位符`flag = 1`
+- 而加完flag，需要重写设`flag = 0`
+- 如果最后一位相加`flag = 1`，需要`push(1)`
+- 最后`reverse()`后再`join()`
+
+```js
+function add(a, b) {
+    var aList = a.split('').reverse();
+    var bList = b.split('').reverse();
+    var flag = 0;
+   var max = Math.max(aList.length, bList.length);
+    
+    var cList = [];
+    
+    for (var i = 0, len = max; i < len; i++) {
+        
+        var tmp = ( +aList[i] || 0 ) + ( +bList[i] || 0 ) + flag;
+        console.log(tmp)
+        flag = 0;
+        if(tmp > 9) {
+            tmp -= 10;
+            flag = 1;
+            console.log(tmp)
+        }
+        cList.push(tmp);
+    }
+
+    if(flag) {
+        cList.push(1)
+    }
+
+    return cList.reverse().join('')
+}
+
+module.exports = add
+
+```
+
+* [Travis CI Node](https://docs.travis-ci.com/user/languages/javascript-with-nodejs/)
+
+1. 先打开`CI`,注册或者登陆，在`Accounts`里面，打开需要`CI`的仓库
+
+2. 在本地生成`.travis.yml`
+```
+language: node_js // 使用的语言
+node_js:
+  - "7"  // 使用的node版本
+before_install:
+  - npm install -g mocha // 使用前需要安装
+```
+`CI`可以自动运行
+`npm install` 
+和你在`package.json`里面设置的test命令
+
+3. 在`package.json`中`repository`的地址是否正确
+
+* 什么情况下去做单元测试 ？
+
+- 公共组件需要
+- 开源项目需要
+- 会测试用会在大公司加分，node服务
+
+[一些test的框架](https://github.com/sindresorhus/awesome-nodejs)
+
+`集成测试`除了单元测试，还能跑所有单元或者模块联合起来的测试
+
+
+* should.js
+不需要再各个模块里面`require('should')`
+需要创建`mocha.opts`
+```
+--require should
+```
+这样会对所有的funtion、object的原型链注入`should`,而should里又有一些方法
+[should API](https://shouldjs.github.io/)
+
+```js
+add('42329', '21532')
+      .should.equal('63861')
+```
+
+* 测试率
+
+测试对原始代码的覆盖率，超过`70%`就很好
+
+可以使用[node-coveralls](https://github.com/nickmerwin/node-coveralls)
+
+可以参考
+[url-extract](https://github.com/miniflycn/url-extract)
+
+## [exercise3](https://github.com/FE-star/exercise3)
+
+`before`测试开始
+`after`测试结束
+
+karma可以启动浏览器，并调用mocha可以单元测试
+
+```js
+$.ajax('https://raw.githubusercontent.com/FE-star/exercise1/master/test/test.js', function () {
+    corssDomain: true //跨域请求 需要标识出来
+}).success(function () {
+    done()
+})
+```
+
+jquery发现请求不是`localhost`,它会在`XMLHTTPRequest2`里面`Access-Control-Allow-Origin: *`,`*`表示所有请求都跨域
+
+测试用例2000ms没有返回会报错
+
+`done()`异步测试必须有回调才能告诉测试框架，异步测试成功
+
+# 下次作业
+
+homework1
