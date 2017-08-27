@@ -195,7 +195,7 @@ Dom标准事件流的触发的先后顺序为：先捕获再冒泡，即当触�
 
 * CDN是什么?为什么能资源加速?
 
-![](https://raw.githubusercontent.com/mayufo/mayufo.github.io/master/2017/08/06/%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0/%C2%A0study_1.png)
+![](https://github.com/mayufo/stuQ-study/blob/master/image/ study_1.png)
 
     * 用户从local DNS看下，那个IP比较好
     * 如果本地的DNS没有找到去向上递归，去查询腾讯的DNS，查到最佳的接入IP，这个最佳可能跟你是同个线路的服务器
@@ -214,7 +214,7 @@ CDN的动态加速？
 * 你知道前端怎么样能拿到DNS的查询时间吗?
 
 h5以后的方案 有个`performance.timing`的接口,可以做一些性能监控，握手时间、onload时间...
-![](https://raw.githubusercontent.com/mayufo/mayufo.github.io/master/2017/08/06/%E5%89%8D%E7%AB%AF%E5%AD%A6%E4%B9%A0/%C2%A0study_2.png)
+![](https://github.com/mayufo/stuQ-study/blob/master/image/ study_2.png)
 
 
 * 你能拿 localStorage 来做些什么? 
