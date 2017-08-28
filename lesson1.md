@@ -301,16 +301,16 @@ try{
     assert.equal(e.message, 'xxx is not defined')
 }
 ```
-在开源项目中发现一个`bug`,不仅要解决bug,而且需要测试用例来描述
+在开源项目中发现一个`bug`,不仅要解决bug,而且需要测试用例来描述
 
 ## [exercise2](https://github.com/FE-star/exercise2)
 
 大数相加思路
 
 - 将需要相加的数用`split`拆为数组
-- 由于位数不一定相等可以使用`reverse`对数组进行倒序
+- 由于位数不一定相等可以使用`reverse`对数组进行倒序
 - 判断出那个位数比较多的作为循环的结束，通过循环，按位相加,并加进位符flag
-- 如果某位大于9，则次位需要减10，并设置进位符`flag = 1`
+- 如果某位大于9，则次位需要减10，并设置进位符`flag = 1`
 - 而加完flag，需要重写设`flag = 0`
 - 如果最后一位相加`flag = 1`，需要`push(1)`
 - 最后`reverse()`后再`join()`
@@ -350,7 +350,7 @@ module.exports = add
 
 * [Travis CI Node](https://docs.travis-ci.com/user/languages/javascript-with-nodejs/)
 
-1. 先打开`CI`,注册或者登陆，在`Accounts`里面，打开需要`CI`的仓库
+1. 先打开`CI`,注册或者登陆，在`Accounts`里面，打开需要`CI`的仓库
 
 2. 在本地生成`.travis.yml`
 ```
@@ -383,7 +383,7 @@ before_install:
 ```
 --require should
 ```
-这样会对所有的funtion、object的原型链注入`should`,而should里又有一些方法
+这样会对所有的funtion、object的原型链注入`should`,而should里又有一些方法
 [should API](https://shouldjs.github.io/)
 
 ```js
@@ -415,11 +415,11 @@ $.ajax('https://raw.githubusercontent.com/FE-star/exercise1/master/test/test.js'
 })
 ```
 
-jquery发现请求不是`localhost`,它会在`XMLHTTPRequest2`里面`Access-Control-Allow-Origin: *`,`*`表示所有请求都跨域
+jquery发现请求不是`localhost`,它会在`XMLHTTPRequest2`里面`Access-Control-Allow-Origin: *`,`*`表示所有请求都跨域
 
 测试用例2000ms没有返回会报错
 
-`done()`异步测试必须有回调才能告诉测试框架，异步测试成功
+`done()`异步测试必须有回调才能告诉测试框架，异步测试成功
 
 # 下次作业
 

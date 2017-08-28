@@ -532,7 +532,7 @@ function package(callback){
 ## global-module
 
 最早没有模板化，当时主要期望通过闭包，来解决全局变量污染的问题
-通过自执行函数，将`global`传进去，然后将方法挂载在`global`
+通过自执行函数，将`global`传进去，然后将方法挂载在`global`
 但库依然占用全局变量
 
 ```js
