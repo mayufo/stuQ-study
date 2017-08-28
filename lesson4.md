@@ -227,5 +227,30 @@ const CONFIG = { id: 1, action: 'click' }
 pv/uv有没有明显的波动，做一些警告，是不是网站挂了如何
 做一些接口的监控
 
-# 来自滕雪的错误监控方案 —— badjs
+# 来自腾讯的错误监控方案 —— badjs
+
+会不会又偏远地区的cdn故障导致页面空白？
+
+会不会有边界条件未验证导致错误？
+
+会不会又后台返回不符合预期导致错误？
+
+会不会用户产生了不可预知的操作导致错误？
+
+怎么捕获前端的错误呢？
+
+使用window.error捕获
+
+```js
+window.onerror = function (msg, url, row, col, error) {
+  // todo report
+  report({
+    msg: msg,
+    url: url,
+    row: row,
+    col: col
+  })
+}
+```
+
 
