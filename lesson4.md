@@ -380,3 +380,83 @@ var _processStackMsg = function (error) {
 
 `badjs`分那么多库所以才能多机部署，方便分流压力
 
+# 正则
+[exercise5](https://github.com/FE-star/exercise5)
+
+### 正则的方法
+
+* `/^1/.test(str)`一个在字符串中测试是否匹配的RegExp方法，它返回true或false
+* `/^324/.exec(str)`一个在字符串中执行查找匹配的RegExp方法，它返回一个数组（未匹配到则返回null
+
+* `str.match(regexp)` 一个在字符串中执行查找匹配的String方法，它返回一个数组或者在未匹配到时返回null
+
+### 正则表达式
+
+* 以什么开始^
+
+```js
+return /^LITERALLY/.test(str)
+// or
+regexp = '^LITERALLY'
+return str.match(regexp)
+```
+* 以什么结尾
+
+```js
+return /BANANAS$/.test(str)
+// or
+regexp = 'BANANAS$'
+return str.match(regexp)
+```
+
+如果本身希望以`$`结束
+`return /BANANAS\$$/.test(str)`
+
+* 可以是a、1、u、4和o开头，以`[]`方式，表示数组里面任意的一个
+
+`return /^[auo14]/.test(str)`
+
+* 开头是个非数字，第二个是非大写字母,在`[]`里面的`^`代表非
+
+`return /^[^0-9][^A-Z]/.test(str)`
+```js
+'.a .b .c'.split(' ') //[".a", ".b", ".c"]
+'.a .b .c'.split(/\s/) //[".a", ".b", ".c"]
+```
+
+[exercise6](https://github.com/FE-star/exercise6)
+
+* 以.为结束
+
+```js
+return /\.$/.test(str)
+```
+`()`、`{}`、`?`、 `*`、`.` 在匹配的时候需要转义`\`
+
+* 匹配一张名字为数字的 jpg 图片
+
+```js
+return /^\d+\.jpe?g$/.test(str)
+// or
+return /^\d+\.(jpg|jpeg)$/.test(str)
+//or
+return /^[0-9]+\.(jpg|jpeg)$/.test(str)
+```
+
+`\d` 匹配一个数字字符，等价于[0-9]
+`\D` 匹配一个非数字字符，等价于[^0-9]
+`+`  匹配一个或多个
+`*` 匹配没有或多个
+`?` 匹配有或者没有
+`|` 或的关系
+
+* 正确的 split 字符串
+`\s` 匹配任何不可见字符，包括空格( )、制表符（\r）、换行符（\n）
+```js
+return str.split(/\s*,\s*/)
+```
+
+# 下周
+
+- 贪婪和惰性正则
+- 模板引擎 DSL
