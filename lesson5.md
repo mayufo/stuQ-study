@@ -297,5 +297,41 @@ Polymer = MVVM + Web Component
 
 2. 人员
 
-从动态运营到动态开发资源
-`html5`
+* 从动态运营到动态开发资源
+
+![从动态运营到动态开发资源](https://github.com/mayufo/stuQ-study/blob/master/image/ study_23.png)
+
+
+全栈不是什么都精通，而是什么都能做，所以要降低开发难度
+DSL是降低前端开发难度的良药
+
+* 从分裂走向统一
+
+![从分裂走向统一](https://github.com/mayufo/stuQ-study/blob/master/image/ study_22.png)
+
+3. 技术
+
+* 上层稳定，底层变动不影响上层
+
+2014 jq,angualr好
+2015 angular差，React很好
+2016 React全家桶复杂，Vue很简单
+2017 ？
+
+![底层变动不影响上层](https://github.com/mayufo/stuQ-study/blob/master/image/ study_24.png)
+
+
+根据不同的人，摆出不同的`PLAN`,和不同的人说出不同的价值
+
+* 价值在何处？
+
+* 说出故事，找到价值，集合资源，一件事是否能做出色跟资源有很大关系
+* 一件事情，说不清楚价值，没人任何，做的再好也白做
+* 很多事情要跨团队配合才能完成，必须有这样的人来推进事情发生
+
+
+* 提高效率的方法
+
+  * 番茄工作法
+  * 记录每天做的事情
+  * 不要并行做某些事情
