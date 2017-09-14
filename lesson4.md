@@ -2,7 +2,7 @@
 
 回调有两次
 - 如果`Local Storage`有数据，用`Local Storage`里面的数据,再回调一次，再从线上拿数据，并存在`Local Storage`
-- 如果本地数据，发送请求拿数据
+- 如果本地有`Local Storage`数据，先`Local Storage`里面的数据，再发送请求更新数据`Local Storage`
 
 `Local Storage`数据存储会超出，需要处理
 

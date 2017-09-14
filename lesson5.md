@@ -107,6 +107,8 @@ describe('defer', function (){
 
 karma start 
 
+[司徒正美的加载器]（http://www.cnblogs.com/rubylouvre/archive/2013/01/23/2872618.html）  
+
 # 前端模板 & DSL
 
 [前端模板 & DSL](https://github.com/FE-star/2017.8/blob/master/%E4%BB%8E%E5%89%8D%E7%AB%AF%E5%B0%8F%E5%B7%A5%E5%88%B0%E4%B8%AD%E7%BA%A7%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E5%BF%85%E5%A4%87%E6%8A%80%E8%83%BD%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF%E6%A8%A1%E7%89%88.pdf)
@@ -335,3 +337,213 @@ DSL是降低前端开发难度的良药
   * 番茄工作法
   * 记录每天做的事情
   * 不要并行做某些事情
+
+
+[司徒正美的加载器]（http://www.cnblogs.com/rubylouvre/archive/2013/01/23/2872618.html）
+
+# 九月份的大作业
+
+[svelte](https://svelte.technology/)
+
+* Svelte 基本过程
+
+DSL -> Token -> AST -> Validate -> Generator -> Target Code
+
+[sveltejs](https://github.com/sveltejs/svelte/tree/master/src)
+
+parse 把代码编程Token, 再把Token编程AST
+
+Validate验证AST的解构
+Generator生成各种代码，比如vue或者react
+
+# 正则
+
+[exercise7](https://github.com/FE-star/exercise7)
+
+1. 
+```js
+it('可以捕获正整数 x 的值', function () {
+    const f = require('../lib/capture')
+
+    assert.equal(f('x=5'), '5', 'x=5')
+    assert.equal(f('abc x=5'), '5', 'abc x=5')
+    assert.equal(f('x=abc'), null, 'x=abc')
+    assert.equal(f('beep x=123123 boop'), '123123', 'beep x=123123 boop')
+  })
+```
+
+```js
+const match = str.match(/x=(\d+)/)
+return match ? match[1] : null
+```
+2. 
+```js
+it('可以捕获正整数 x 的值，末尾带有 x 的变量不应当被捕获', function () {
+    const f = require('../lib/capture_breakword')
+    assert.equal(f('x=5'), '5', 'x=5')
+    assert.equal(f('abc x=5'), '5', 'abc x=5')
+    assert.equal(f('fox=123'), null, 'fox=123')
+    assert.equal(f('x=abc'), null, 'x=abc')
+    assert.equal(f('x=33qrs'), null, 'x=33qrs')
+    assert.equal(f('3x=33'), null, '3x=33')
+    assert.equal(f('beep x=123123 boop'), '123123', 'beep x=123123 boop')
+  })
+```
+
+`\b`匹配一个单词边界，也就是指单词和空格间的位置
+
+```js
+const match = str.match(/\bx=(\d+)\b/)
+return match ? match[1] : null
+```
+3. 
+```js
+it(`匹配8位 hex 代码，以'0x'开头，后面跟着两个字符可以是大写'A-F'，小写'a-f'，或者任意数字`, function () {
+    const f = require('../lib/quantified_group')
+
+    assert.ok(
+      f('0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF\n'),
+      '0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF\\n'
+    )
+    assert.ok(
+      f('0x00\n0x11\n0x22\n0x33\n0x44\n0x55\n0x66\n0x77\n'),
+      '0x00\\n0x11\\n0x22\\n0x33\\n0x44\\n0x55\\n0x66\\n0x77'
+    )
+    assert.ok(
+      f('0x0f  0x1f  0x2f  0x3f  0x4f  0x5f  0x6f  0x7f\n'),
+      '0x0f  0x1f  0x2f  0x3f  0x4f  0x5f  0x6f  0x7f\\n'
+    )
+    assert.ok(
+      f('0xE2 0xC3 0xB3 0xD0 0x44 0x9E 0x6F 0x7F\n'),
+      '0xE2 0xC3 0xB3 0xD0 0x44 0x9E 0x6F 0x7F\\n'
+    )
+    assert.ok(
+      !f('0xE2 0xC3 0xB3 0xD0 0x44 0x9E 0x6F\n'),
+      '0xE2 0xC3 0xB3 0xD0 0x44 0x9E 0x6F\n'
+    )
+    assert.ok(
+      !f('0xE2 0xC3 0xB3 0xD0 0x44 0x9E 0x6F 0xff 0xff\n'),
+      '0xE2 0xC3 0xB3 0xD0 0x44 0x9E 0x6F 0xff 0xff\n'
+    )
+  })
+```
+
+`{n}` n是一个非负整数。匹配确定的n次。例如，“o{2}”不能匹配“Bob”中的“o”，但是能匹配“food”中的两个o
+`{n,}` n是一个非负整数。至少匹配n次。例如，“o{2,}”不能匹配“Bob”中的“o”，但能匹配“foooood”中的所有o。“o{1,}”等价于“o+”。“o{0,}”则等价于“o*”
+`{n,m} `m和n均为非负整数，其中n<=m。最少匹配n次且最多匹配m次。例如，“o{1,3}”将匹配“fooooood”中的前三个o为一组，后三个o为一组。“o{0,1}”等价于“o?”。请注意在逗号和两个数之间不能有空格
+
+```js
+return /^(0x[A-Fa-f0-9]{2}\s+){8}$/.test(str)
+```
+匹配以`0x`开头，`A-Fa-f0-9`两位，后面匹配任意多的`\n`或者空格，且一共8位
+
+4. 
+```js
+it('匹配所有引号', function () {
+    const f = require('../lib/quotes')
+    assert.deepEqual(
+      f('one "two three four" five six "seven eight" nine'),
+      ['"two three four"','"seven eight"'],
+      'one "two three four" five six "seven eight" nine'
+    )
+    assert.deepEqual(
+      f('"beep boop" whatever "tacos" eleven "eighty"'),
+      ['"beep boop"','"tacos"','"eighty"'],
+      '"beep boop" whatever "tacos" eleven "eighty"'
+    )
+    assert.deepEqual(f('empty ""'), ['""'], 'empty ""')
+  })
+ ```
+`/i` (忽略大小写)
+`/g` (全文查找出现的所有匹配字符)
+`/m` (多行查找)
+`/gi`(全文查找、忽略大小写)
+`/ig`(全文查找、忽略大小写)
+
+```js
+return str.match(/"[^"]*"/g)
+```
+* 贪婪匹配和惰性匹配
+
+```js
+// 贪婪匹配
+//'one "two three four" five six "seven eight" nine'
+return str.match(/".*"/g) 
+// 引号开始任意字符 * 没有或者多个 没有？匹配 会尽可能多的匹配文字 "two three four" five six "seven eight"
+// 惰性匹配
+return str.match(/".*?"/g) 
+// 引号开始任意字符 * 没有或者多个 ？ 匹配最少 会匹配到"two three four"
+```
+
+5.
+
+```js
+it(`将'@@...@@'markdown语法变成'<blink>...</blink>'`, function () {
+    const f = require('../lib/blink')
+    
+    assert.equal(
+      f('@@whatever@@').trim(),
+      '<p><blink>whatever</blink></p>', // <p>@@whatever@@</p>
+      '@@whatever@@'
+    )
+    assert.equal(
+      f('*abc* @@def@@ __ghi__').trim(),
+      '<p><em>abc</em> <blink>def</blink> <strong>ghi</strong></p>', // <p><em>abc</em> @@def@@ <strong>ghi</strong></p>
+      '*abc* @@def@@ __ghi__'
+    )
+    assert.equal(
+      f('@@**cool**@@').trim(),
+      '<p><blink><strong>cool</strong></blink></p>',
+      '@@**cool**@@'
+    )
+    assert.equal(
+      f('beep @@boop@@ says *the* @@**robot**@@!').trim(),
+      '<p>beep <blink>boop</blink> says <em>the</em>'
+        + ' <blink><strong>robot</strong></blink>!</p>',
+      'beep @@boop@@ says *the* @@**robot**@@!'
+    )
+  })
+```
+
+
+```js
+var marked = require('marked')
+
+module.exports = function (str) {
+  var md = marked(str) // markdown 语法变为html, 把对应的语法替换
+  // TODO
+  console.log(md)
+  return md.replace(/@@(.+?)@@/g, '<blink>$1</blink>') // $1第一个匹配到的
+}
+```
+
+[正则表达式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions)
+
+
+
+`^` 以什么开头
+`$` 以什么结尾
+`\d` 匹配一个数字字符，等价于[0-9]
+`\D` 匹配一个非数字字符，等价于[^0-9]
+`\s` 匹配一个空白字符，包括空格、制表符(\r)、换页符(\f)和换行符(\n)
+`\S` 匹配一个非空白字符。
+`\w` 匹配一个单字字符（字母、数字或者下划线）。等价于[A-Za-z0-9_]。
+`\W` 匹配一个非单字字符。等价于[^A-Za-z0-9_]
+`?`	出现零次或一次
+`*`	出现零次或多次(任意次)
+`+`	出现一次或多次（至道一次）
+
+`\` 转义
+`[^]` 非什么 
+
+`{n}` n是一个非负整数。匹配确定的n次。例如，“o{2}”不能匹配“Bob”中的“o”，但是能匹配“food”中的两个o
+`{n,}` n是一个非负整数。至少匹配n次。例如，“o{2,}”不能匹配“Bob”中的“o”，但能匹配“foooood”中的所有o。“o{1,}”等价于“o+”。“o{0,}”则等价于“o*”
+`{n,m} `m和n均为非负整数，其中n<=m。最少匹配n次且最多匹配m次。例如，“o{1,3}”将匹配“fooooood”中的前三个o为一组，后三个o为一组。“o{0,1}”等价于“o?”。请注意在逗号和两个数之间不能有空格
+
+常用的四个方法
+`exec`	一个在字符串中执行查找匹配的RegExp方法，它返回一个数组（未匹配到则返回null）。
+`test`	一个在字符串中测试是否匹配的RegExp方法，它返回true或false。
+`match`	一个在字符串中执行查找匹配的String方法，它返回一个数组或者在未匹配到时返回null。
+`replace`	一个在字符串中执行查找匹配的String方法，并且使用替换字符串替换掉匹配到的子字符串。
+
+贪婪和惰性
