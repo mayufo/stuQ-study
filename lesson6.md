@@ -26,7 +26,7 @@
 * 设计初衷在于解决CGI拉取的通用性问题 ，区分正确和错误逻辑、通用错误逻辑处理、登录态通用处理，但是DB却难以复用，因为每个业务的同用性各不相同，通常我们新起一个业务总是要将DB赋值下来后做大量侵入式修改，才能适用于新的业务要求
 `CGI`描述了服务器和请求处理程序之间传输数据的一种标准
 
-![通用错误码而不是状态码](https://github.com/mayufo/stuQ-study/blob/master/image/ study_25.png)
+![通用错误码而不是状态码](https://github.com/mayufo/stuQ-study/blob/master/image/study_25.png)
 
 `DB场景`处理登录态续登录的问题,相当于http拦截器,可以对数据做一些分流，用管道处理些业务相关的数据，如果业务较多的时候需要定制化，需要有种模型做抽象，可以通过`pipe line`对数据做处理
 
