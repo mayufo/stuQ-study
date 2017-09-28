@@ -67,29 +67,299 @@ facebook 有增加了`BSD+协议`，如果你使用我的react,我抄袭你，�
 
 [showcase5](https://github.com/mayufo/showcase5)
 
-`hash` 版本控制
+需要全局安装webpack和webpack-dev-server 最好都安装2.x的版本
 
-`timestmp` 上线时间戳
+- hello webpack
 
+webpack.config.js
+
+```js
+module.exports = {
+  // 入口文件  
+  entry: __dirname + '/src',
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        include: __dirname + '/src',
+        use: 'babel-loader'
+      }
+    ]
+  },
+  // 输出文件
+  output: {
+    path: __dirname + '/dist',
+    filename: 'bundle.js'
+  }
+}
+```
+
+走到hell-webpack中
+输入webpack,会打包出`bundle.js`
+在输入`webpack-dev-server`,会看到hello world
+
+
+- multiple-entries
+
+```js
+const path = require('path')
+
+module.exports = {
+  /**
+   * The base directory 
+   */
+  context: path.join(__dirname, './src'),
+  entry: {
+    /**
+     * 定义了多个入口文件
+     */
+    home: './home',
+    user: ['./user', './account']
+  },
+  output: {
+    path: path.join(__dirname, './dist'),
+    /**
+     * 可以映射变量[name]和[hash]
+     */
+    filename: '[name].bundle.[hash].js'
+  }
+}
+```
+`name` 代表自身的文件名，因为入口是两个 就不能写固定的xxx.bundle.js
+`hash` 打出文件的md5值，hash可以帮助我们做的版本控制
+`timestmp` 上线时间戳, 也可以版本控制，jd常用
 `version` 版本
 
-babel 又改成了env
+hash、时间戳、version
 
-[官方任何的loader](https://webpack.js.org/loaders/)
+- loader
+```js
+module.exports = {
+  entry: __dirname + '/src',
+  module: {
+    rules: [
+      {
+        test: /\.js$/,  // 匹配哪些文件需要
+        include: __dirname + '/src', // 包含哪些做处理
+        use: 'babel-loader'  // 增加babel-loader 插件
+      }
+    ]
+  },
+  output: {
+    path: __dirname + '/dist',
+    filename: 'bundle.js'
+  }
+}
+```
+babel 的配置，根据配置生成代码
+```js
+{
+  "presets": ["es2015", "stage-0"]
+}
+```
+babel近期又改成了`env`
 
+[官方认可的loader](https://webpack.js.org/loaders/)
 
-`style-loader`
+- style
 
-`css-loader`
+三种方式
 
-`file-loader` 处理图片
+1. webpack.styles.config.js   
+
+style-loader和css-loader
+
+先用css-loader把css抓取出来，再通过<style>标签插入css代码
+
+`webpack --config webpack.styles.config.js`
+
+```js
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+module.exports = {
+  context: __dirname + '/src',
+  entry: './',
+  module: {
+    rules: [{
+      test: /\.css$/,
+      include: [
+        __dirname + '/src'
+      ],
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: ['css-loader', 'autoprefixer-loader']
+      })
+    }]
+  },
+  output: {
+      path: __dirname + '/dist',
+      filename: '[name].bundle.[hash].js'
+  },
+  plugins: [
+    new ExtractTextPlugin('[name].css')
+  ]
+};
+```
+
+style-loader 把css用字符串的方式写入到js里面，然后创建style标签，把对应的css字符串放在style标签里面
+
+优点： 比较快，不会打出多个文件，使用webpack-dev-server直接打开，线上和测试使用
+
+2. webpack.extract.config 上线使用
+
+对应的字符串`extract`出来对应一个新的文件,会生成一个对应js文件和css文件，在html中分别引入两个文件
+
+```js
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+module.exports = {
+  context: __dirname + '/src',
+  entry: './',
+  module: {
+    rules: [{
+      test: /\.css$/,
+      include: [
+        __dirname + '/src'
+      ],
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader', // 备胎
+        use: 'css-loader'
+      })
+    }]
+  },
+  output: {
+      path: __dirname + '/dist',
+      filename: '[name].bundle.[hash].js'
+  },
+  plugins: [
+    new ExtractTextPlugin('[name].css')
+  ]
+}
+
+```
+
+3. webpack.autoprefix.config  // 对css 某些属性增加前缀，增加了兼容能力
+
+```js
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+module.exports = {
+  context: __dirname + '/src',
+  entry: './',
+  module: {
+    rules: [{
+      test: /\.css$/,
+      include: [
+        __dirname + '/src'
+      ],
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: ['css-loader', 'autoprefixer-loader']
+      })
+    }]
+  },
+  output: {
+      path: __dirname + '/dist',
+      filename: '[name].bundle.[hash].js'
+  },
+  plugins: [
+    new ExtractTextPlugin('[name].css')
+  ]
+};
+```
  
-`Comm`
+当有些公共库不需要打进去的时候
+
+- common-chunks
+
+style.css是公共的
+
+```js
+var path = require('path')
+var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin') // 打出公用的
+var ExtractTextPlugin = require('extract-text-webpack-plugin')  // 处理css
+
+module.exports = {
+  context: __dirname + '/src',
+  entry: {
+    A: './a',
+    B: './b',
+    C: './c',
+  },
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: '[name].js'
+  },
+  module: {
+    rules: [{
+      test: /\.css$/,
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: 'css-loader'
+      })
+    }, { 
+      test: /\.png$/, 
+      use: 'file-loader'  // 处理图片
+    }]
+  },
+  plugins: [
+    new CommonsChunkPlugin({  // 共同的东西打成commons.js
+      name: 'commons',
+      filename: 'commons.js'
+    }),
+    new ExtractTextPlugin('[name].css')
+  ]
+};
+```
+
+打出用公用的commons.js
+A.js
+A.css
+B.js
+B.css
+C.js
+C.css
+
+A页面就可以使用A.js\A.css\commons.js
+
+- vendor
+
+假设有个项目依赖jquery和underscore
+
+```js
+var path = require('path')
+var webpack = require('webpack')
+
+module.exports = {
+  context: __dirname + "/src",  // path.join(__dirname, "/src"); window下要使用path.join
+  entry: {
+    app: './',
+    vendor: ['jquery', 'underscore'], // 使用vendor来先打出
+  },
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'vendor.bundle.js'  // 将vendor变为通用的东西
+    })
+  ]
+}
+```
+
+生成两个文件一个是bundle.js对应index.js文件
+`vendor` 会将`jquery/underscore`打在一起，并且能够让`bundle.js`使用
 
 
-如果我有css的string，如何用js插进去
+WTFPL 你想干什么都可以的专利 License  
 
-创建style 标签插入
+# loader 练习
+
+[exercise12](https://github.com/mayufo/exercise12)
+
+[How to write a loader?](https://webpack.js.org/development/how-to-write-a-loader/)
 
 
 https://webpack.js.org/api/loaders/
