@@ -361,9 +361,55 @@ WTFPL 你想干什么都可以的专利 License
 
 [How to write a loader?](https://webpack.js.org/development/how-to-write-a-loader/)
 
+将hello word 编程amd模块, 包装成类似
 
-https://webpack.js.org/api/loaders/
+![exercise12](https://github.com/mayufo/stuQ-study/blob/master/image/study_27.png)
 
-https://github.com/webpack-china/awesome-webpack-cn
 
-https://github.com/pigcan/blog/issues/1
+```js
+module.exports = function (source) {
+    if (~this.request.indexOf('webpack/buildin/global.js')) {  // 如果存在global.define 就直接导出
+        return source
+    } else {
+        return `
+    global.define(function (module, exports) {  // 如果不存在
+        ${source}
+    })
+`
+    }
+    console.log(this.request)
+}
+```
+
+`this.request`
+In the example: "/abc/loader1.js?xyz!/abc/node_modules/loader2/index.js!/abc/resource.js?rrr"
+              
+
+
+
+[主要看进阶的内容](https://github.com/webpack-china/awesome-webpack-cn)
+
+> webpack 面试可能被问的问题
+
+使用webpack
+
+组装loader,组装工程
+
+自己怎么写个loader或者plugin
+
+性能问题如何解决,如何优化
+
+
+[大项目如何性能优化]（https://github.com/pigcan/blog/issues/1）
+
+# 这种作业
+
+1. 写一个webpack的插件，使得编译出来的代码兼容IE8，主要是不使用`Object.defineProperty`
+
+2. 大作业，写一个 generator 把模版编译成react代码 
+
+如何对应上render,先尝试each
+
+React.createElement(tagname, props, …children)
+
+[exercise13](https://github.com/mayufo/exercise13)
