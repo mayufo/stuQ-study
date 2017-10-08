@@ -413,3 +413,13 @@ In the example: "/abc/loader1.js?xyz!/abc/node_modules/loader2/index.js!/abc/res
 React.createElement(tagname, props, …children)
 
 [exercise13](https://github.com/mayufo/exercise13)
+
+思路： return 数组 if的情况解构，each的情况下，连接起来.并且要需要解构
+
+> 为什么要解构
+
+数组的话一定是列表，列表是一定要带key,否则会抛错，如果解构以后就不会认为是列表
+
+> 为什么要区分列表非列表
+
+react 16以后 没有列表有key的优化，而是使用`react fiber`
